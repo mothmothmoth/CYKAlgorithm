@@ -6,18 +6,9 @@ public class GrammarCNF {
 
     private final RuleMap rules = new RuleMap();
 
-    public static GrammarCNF Lex(String grammar, String[] terminals, String[] nonTerminals) {
+    public static GrammarCNF Lex(String grammar) {
         GrammarCNF gramFin = new GrammarCNF();
         List<String> rules = grammar.lines().toList();
-
-        // sorted so when lexing symbols we will find larger symbols first
-        Arrays.sort(terminals, Comparator.comparingInt(String::length).reversed());
-        for (String terminal : terminals)
-            gramFin.terminals.add(new Symbol(terminal, true));
-
-        Arrays.sort(nonTerminals, Comparator.comparingInt(String::length).reversed());
-        for (String nonTerminal : nonTerminals)
-            gramFin.nonTerminals.add(new Symbol(nonTerminal, false));
 
         for (String line : rules) {
             Rule rule = Rule.Lex(gramFin, line);
@@ -27,15 +18,60 @@ public class GrammarCNF {
         return gramFin;
     }
 
+    public Symbol getTerminalFromString(String string) {
+        for (Symbol symbol : terminals) {
+            if (symbol.represents(string)) {
+                return symbol;
+            }
+        }
+        throw new RuntimeException("Symbol " + string + " does not exist as a terminal");
+    }
+
+    public Symbol getNonTerminalFromString(String string) {
+        for (Symbol symbol : nonTerminals) {
+            if (symbol.represents(string)) {
+                return symbol;
+            }
+        }
+        throw new RuntimeException("Symbol " + string + " does not exist as a non-terminal");
+    }
+
+    public List<Symbol[]> symbolsFromSymbol(Symbol symbol) {
+        return rules.symbolsFromSymbol(symbol);
+    }
+
+    public List<Symbol> symbolsToSymbol(Symbol[] symbolSet) {
+        return rules.symbolsToSymbol(symbolSet);
+    }
+
+    public int containsTerminal(Symbol terminalMatch) {
+        for (int i = 0; i < terminals.size(); i++) {
+            if (terminals.get(i).symbol.equals(terminalMatch.symbol)) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    public int containsNonTerminal(Symbol nonTerminalMatch) {
+        for (int i = 0; i < nonTerminals.size(); i++) {
+            if (nonTerminals.get(i).symbol.equals(nonTerminalMatch.symbol)) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
+        List<Rule> rules = this.rules.getRules();
 
         sb.append("V = ").append(nonTerminals).append("\n");
         sb.append("Σ = ").append(terminals).append("\n\n");
         sb.append("Grammar:\n");
-        for (Symbol sym : nonTerminals) {
-            sb.append(rules.get(sym).toString()).append("\n");
+        for (Rule rule : rules) {
+            sb.append(rule.toString()).append("\n");
         }
 
         return sb.toString();
@@ -43,7 +79,7 @@ public class GrammarCNF {
 }
 
 class RuleMap {
-    HashMap<Symbol, Rule> rules = new HashMap<>();
+    LinkedHashMap<Symbol, Rule> rules = new LinkedHashMap<>();
 
     public void add(Rule rule) {
         if (rules.containsKey(rule.left)) {
@@ -53,17 +89,31 @@ class RuleMap {
         }
     }
 
-    public Rule get(Symbol leftHand) {
-        return rules.get(leftHand);
-    }
-
-    public List<Symbol[]> fromSymbol(Symbol symbol) {
+    // produces a list of that symbol's rule's right hand side
+    protected List<Symbol[]> symbolsFromSymbol(Symbol symbol) {
         if (!rules.containsKey(symbol))
             throw new RuntimeException("No rules from the symbol " + symbol);
         return rules.get(symbol).right;
     }
 
-    public List<Rule> getRules() {
-        return rules.values().stream().toList();
+    // produces a list of all rule left-hands that can turn into this symbol
+    // symbolSet is an array incase you want to search for if a symbol can create a pair of symbols
+    protected List<Symbol> symbolsToSymbol(Symbol[] symbolSet) {
+        List<Symbol> leftSides = new ArrayList<>();
+
+        for (Map.Entry<Symbol, Rule> rule : this.rules.sequencedEntrySet()) {
+            for (Symbol[] symbols : rule.getValue().right) {
+                if (Arrays.equals(symbols, symbolSet)) {
+                    leftSides.add(rule.getKey());
+                    break;
+                }
+            }
+        }
+
+        return leftSides;
+    }
+
+    protected List<Rule> getRules() {
+        return rules.sequencedValues().stream().toList();
     }
 }
