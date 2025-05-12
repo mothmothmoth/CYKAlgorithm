@@ -5,6 +5,7 @@ import java.util.*;
 public class Main {
     public static void main(String[] args) throws IOException {
         Scanner scan = new Scanner(System.in);
+
         String grammar = GrammarCNF.ImportGrammar("grammar");
         GrammarCNF cnf = GrammarCNF.Lex(grammar);
         // Define starting symbol
