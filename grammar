@@ -1,0 +1,5 @@
+S0 → X1 Z1 | b
+S → X1 Z1 | b
+Z1 → S X | X1 Z1 | b
+X → a
+X1 → a

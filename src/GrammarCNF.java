@@ -1,3 +1,7 @@
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.*;
 
 public class GrammarCNF {
@@ -5,6 +9,11 @@ public class GrammarCNF {
     public final List<Symbol> nonTerminals = new ArrayList<>();
 
     private final RuleMap rules = new RuleMap();
+
+    public static String ImportGrammar(String filePath) throws IOException {
+        byte[] file = Files.readAllBytes(Paths.get(filePath));
+        return new String(file, StandardCharsets.UTF_8);
+    }
 
     public static GrammarCNF Lex(String grammar) {
         GrammarCNF gramFin = new GrammarCNF();

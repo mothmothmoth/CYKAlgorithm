@@ -1,16 +1,11 @@
+import java.io.IOException;
 import java.util.*;
 
 
 public class Main {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         Scanner scan = new Scanner(System.in);
-        String grammar = """
-                S0 → X1 Z1 | b
-                S → X1 Z1 | b
-                Z1 → S X | X1 Z1 | b
-                X → a
-                X1 → a
-                """;
+        String grammar = GrammarCNF.ImportGrammar("grammar");
         GrammarCNF cnf = GrammarCNF.Lex(grammar);
         // Define starting symbol
         Symbol startingSymbol = cnf.getStart();
