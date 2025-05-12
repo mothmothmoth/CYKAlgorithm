@@ -44,6 +44,9 @@ public class Symbol {
         return symbol.hashCode();
     }
 
+    // uses regex to split up the string into symbols;
+    // each symbol is either one non-uppercase symbol (terminal) or
+    // an uppercase letter with any amount of numbers following (non-terminal)
     public static Symbol[] Lex(GrammarCNF grammar, String symbols) {
         String[] symbolStrings = Pattern.compile("[A-Z]\\d*|[^A-Z]") // separates non-terminals & terminals
                 .matcher(symbols.replace(" ", "")) // remove spaces for easier lexing
