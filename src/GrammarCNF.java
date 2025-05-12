@@ -19,6 +19,7 @@ public class GrammarCNF {
         GrammarCNF gramFin = new GrammarCNF();
         List<String> rules = grammar.lines().toList();
 
+        // lexes each rule; terminals & nonTerminals are filled by the rule & symbol lexers
         for (String line : rules) {
             Rule rule = Rule.Lex(gramFin, line);
             gramFin.rules.add(rule);
@@ -36,6 +37,7 @@ public class GrammarCNF {
         throw new RuntimeException("Symbol " + string + " does not exist as a terminal");
     }
 
+    // locates and returns the starting symbol; either S0 or S
     public Symbol getStart() {
         try {
             return getNonTerminalFromString("S0");
@@ -108,6 +110,7 @@ public class GrammarCNF {
 class RuleMap {
     LinkedHashMap<Symbol, Rule> rules = new LinkedHashMap<>();
 
+    // if a rule already exists, add the right-hand side to that rule; else put in the rule into the map
     public void add(Rule rule) {
         if (rules.containsKey(rule.left)) {
             rules.get(rule.left).addRight(rule);
@@ -128,11 +131,14 @@ class RuleMap {
     protected List<Symbol> symbolsToSymbol(Symbol[] symbolSet) {
         List<Symbol> leftSides = new ArrayList<>();
 
+        // searches every right-hand side of every rule
         for (Map.Entry<Symbol, Rule> rule : this.rules.sequencedEntrySet()) {
             for (Symbol[] symbols : rule.getValue().right) {
                 if (Arrays.equals(symbols, symbolSet)) {
                     leftSides.add(rule.getKey());
                     break;
+                    // if one of the right-hand sides equals the symbolSet, add the left-hand side to
+                    // the return list and break out of the rule; going onto the next rule
                 }
             }
         }

@@ -12,10 +12,12 @@ public class Rule {
         Rule ruleFin = new Rule();
         String[] ruleSplit = rule.replace("→", "|").split("\\|");
 
+        // lexes the symbols for the left side and checks if its correct
         ruleFin.left = Symbol.Lex(grammar, ruleSplit[0])[0];
         if (ruleFin.left.terminal)
             throw new RuntimeException(ruleFin.left + "cannot be on left-hand of CNF rule");
 
+        // lexes the right-hand side(s)
         for (int i = 1; i < ruleSplit.length; i++) { // elems
             Symbol[] symbols = Symbol.Lex(grammar, ruleSplit[i]);
             ruleFin.right.add(symbols);
