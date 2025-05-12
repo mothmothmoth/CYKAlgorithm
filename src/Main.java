@@ -1,37 +1,23 @@
 import java.io.IOException;
 import java.util.*;
 
-
 public class Main {
+    /**
+     * This class takes an input grammar file and a input for the string the user wants to test, then it outputs the full matrix and whether it belongs in CYK or not.
+     */
     public static void main(String[] args) throws IOException {
         Scanner scan = new Scanner(System.in);
-
         String grammar = GrammarCNF.ImportGrammar("grammar");
         GrammarCNF cnf = GrammarCNF.Lex(grammar);
         // Define starting symbol
         Symbol startingSymbol = cnf.getStart();
         System.out.println(cnf);
-        // Uncomment below to test methods
-//        Symbol zero = cnf.getTerminalFromString("a");
-//        List<Symbol[]> symbolsFrom = cnf.symbolsFromSymbol(cnf.getNonTerminalFromString("X"));
-//        List<Symbol> symbolsTo = cnf.symbolsToSymbol(new Symbol[]{zero});
-//
-//        for (Symbol[] symbols : symbolsFrom) {
-//            System.out.print(Arrays.toString(symbols));
-//        }
-//        System.out.println("\n" + symbolsTo);
-//
-//        Symbol testS = cnf.getNonTerminalFromString("S");
-//        Symbol testX = cnf.getNonTerminalFromString("X");
-//        List<Symbol> test2 = cnf.symbolsToSymbol(new Symbol[]{testS, testX});
-//        System.out.println("Non Terminal that produces SX: " + test2 + "\n");
 
         //Algorithm implementation starts here
         System.out.println("Enter the string you want to check: ");
         String input = scan.nextLine();
 
         //String input = "aba";  // for quick testing
-
         int length = input.length();
         int c = length - 1; // variable used in matrix calculations
 
@@ -59,10 +45,8 @@ public class Main {
         MatrixVisualizer.printMatrix(matrix);
         System.out.println();
 
-
         // Step 2
         // Replace the matrix diagonal with Non-Terminals that produce each corresponding terminal
-
         System.out.println("Step 2");
         System.out.println("Replace the matrix diagonal with Non-Terminals that produce each corresponding terminal");
         for (int row = c ; row >= 0; row--) {
@@ -131,7 +115,6 @@ public class Main {
         }
         MatrixVisualizer.printMatrix(matrix);
         System.out.println();
-
         if (matrix[c][c].contains(startingSymbol)) {
             System.out.println("Language defined by the Grammar in CNF ACCEPTS this string!");
         }

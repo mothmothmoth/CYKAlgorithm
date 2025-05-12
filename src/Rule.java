@@ -1,9 +1,10 @@
 import java.util.ArrayList;
 import java.util.List;
-
-// EBNF for CNF rule implementation
-// rule : nonTerminal → elem ["|" elem]*
-// elem : nonTerminal nonTerminal | terminal
+/**
+ * This class defines the core rules of the CYK algorithm.
+ * rule : nonTerminal → elem ["|" elem]*
+ * elem : nonTerminal nonTerminal | terminal
+ */
 public class Rule {
     public Symbol left;
     public List<Symbol[]> right = new ArrayList<>(); // double list for case like S → AB | x

@@ -1,7 +1,6 @@
 import java.util.List;
 
 public class MatrixVisualizer {
-
     /**
      * This is a simple method that lets us visualize a matrix by printing the contents of each cell neatly inside []
      * @param matrix
@@ -32,6 +31,7 @@ public class MatrixVisualizer {
             System.out.println();
         }
     }
+
     // Comma-separated Symbol list
     private static String getContent(List<Symbol> cell) {
         if (cell == null || cell.isEmpty()) return "";

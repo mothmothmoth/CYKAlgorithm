@@ -4,10 +4,12 @@ import java.util.List;
 import java.util.Objects;
 import java.util.regex.MatchResult;
 import java.util.regex.Pattern;
-
-// EPSILON ε is a constant symbol, the only symbol that is an epsilon; this is used for removing symbols
-// non-terminal symbols have to start with an uppercase number and can be followed by any amount of numbers
-// terminal symbols can be any single non-uppercase character
+/**
+ * This class defines the rules of the symbols in the CYK algorithm.
+ * EPSILON ε is a constant symbol, the only symbol that is an epsilon; this is used for removing symbols
+ * non-terminal symbols have to start with an uppercase number and can be followed by any amount of numbers
+ * terminal symbols can be any single non-uppercase character
+ */
 public class Symbol {
     public static final Symbol EPSILON = new Symbol();
 

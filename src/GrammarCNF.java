@@ -3,11 +3,15 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.*;
-
+/**
+ * This class defines the grammar of Chomsky Normal Form.
+ * EPSILON ε is a constant symbol, the only symbol that is an epsilon; this is used for removing symbols
+ * non-terminal symbols have to start with an uppercase number and can be followed by any amount of numbers
+ * terminal symbols can be any single non-uppercase character
+ */
 public class GrammarCNF {
     public final List<Symbol> terminals = new ArrayList<>();
     public final List<Symbol> nonTerminals = new ArrayList<>();
-
     private final RuleMap rules = new RuleMap();
 
     public static String ImportGrammar(String filePath) throws IOException {
@@ -145,7 +149,6 @@ class RuleMap {
 
         return leftSides;
     }
-
     protected List<Rule> getRules() {
         return rules.sequencedValues().stream().toList();
     }
