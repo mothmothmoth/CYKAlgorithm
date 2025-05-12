@@ -62,6 +62,16 @@ public class GrammarCNF {
         return -1;
     }
 
+    // Method to convert input string to an array of Symbols
+    public Symbol[] stringToSymbolArray (String input) {
+        Symbol[] result = new Symbol[input.length()];
+        for (int i = 0; i < input.length(); i++) {
+            String temp = String.valueOf(input.charAt(i));
+            result[i] = getTerminalFromString(temp);
+        }
+        return result;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();

@@ -32,6 +32,18 @@ public class Symbol {
         return symbol;
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (!(obj instanceof Symbol symbolToCompare)) return false;
+        return symbol.equals(symbolToCompare.symbol);
+    }
+
+    @Override
+    public int hashCode() {
+        return symbol.hashCode();
+    }
+
     public static Symbol[] Lex(GrammarCNF grammar, String symbols) {
         String[] symbolStrings = Pattern.compile("[A-Z]\\d*|[^A-Z]") // separates non-terminals & terminals
                 .matcher(symbols.replace(" ", "")) // remove spaces for easier lexing
@@ -39,6 +51,7 @@ public class Symbol {
         Symbol[] symbolArray = new Symbol[symbolStrings.length];
         boolean terminalExists = false;
         boolean nonTerminalExists = false;
+
 
         for (int i = 0; i < symbolArray.length; i++) {
             if (symbolStrings[i].charAt(0) == 'ε') { // epsilon is a special symbol, needs special treatment
@@ -55,6 +68,7 @@ public class Symbol {
                 if (match == -1)
                     grammar.nonTerminals.add(symbol);
                 symbolArray[i] = match == -1 ? symbol : grammar.nonTerminals.get(match);
+
                 nonTerminalExists = true;
             } else {
                 match = grammar.containsTerminal(symbol);
