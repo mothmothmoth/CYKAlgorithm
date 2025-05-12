@@ -12,8 +12,8 @@ public class Main {
                 X1 → a
                 """;
         GrammarCNF cnf = GrammarCNF.Lex(grammar);
-        // Define starting symbol S0 or S
-        Symbol startingSymbol = cnf.getNonTerminalFromString("S0");
+        // Define starting symbol
+        Symbol startingSymbol = cnf.getStart();
         System.out.println(cnf);
         // Uncomment below to test methods
 //        Symbol zero = cnf.getTerminalFromString("a");

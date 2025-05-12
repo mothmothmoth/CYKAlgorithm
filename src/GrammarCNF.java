@@ -27,6 +27,14 @@ public class GrammarCNF {
         throw new RuntimeException("Symbol " + string + " does not exist as a terminal");
     }
 
+    public Symbol getStart() {
+        try {
+            return getNonTerminalFromString("S0");
+        } catch (RuntimeException e) {
+            return getNonTerminalFromString("S");
+        }
+    }
+
     public Symbol getNonTerminalFromString(String string) {
         for (Symbol symbol : nonTerminals) {
             if (symbol.represents(string)) {
